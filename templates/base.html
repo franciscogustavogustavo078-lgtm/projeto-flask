@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GS System - {% block title %}Sistema de Gestão{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="top-bar">
+        <div class="container-header">
+            <div class="brand" onclick="window.location.href='/'">
+                <div class="logo-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>GS System</h1>
+                    <span>Gestão & Soluções</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="{{ url_for('index') }}" class="nav-item {% if request.endpoint == 'index' %}active{% endif %}">
+                    <i class="fas fa-home"></i> <span>Início</span>
+                </a>
+                <a href="{{ url_for('usuarios') }}" class="nav-item {% if request.endpoint == 'usuarios' %}active{% endif %}">
+                    <i class="fas fa-users"></i> <span>Usuários</span>
+                </a>
+                <a href="{{ url_for('produtos') }}" class="nav-item {% if request.endpoint == 'produtos' %}active{% endif %}">
+                    <i class="fas fa-box"></i> <span>Produtos</span>
+                </a>
+                <a href="{{ url_for('fornecedores') }}" class="nav-item {% if request.endpoint == 'fornecedores' %}active{% endif %}">
+                    <i class="fas fa-truck"></i> <span>Fornecedores</span>
+                </a>
+                <a href="{{ url_for('venda') }}" class="nav-item highlight {% if request.endpoint == 'venda' %}active{% endif %}">
+                    <i class="fas fa-tag"></i> <span>Venda</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <i class="fas fa-{% if category == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+                        {{ message }}
+                        <span class="close-alert">&times;</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2025 GS System — Soluções corporativas em gestão | Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // Fechar alerts automaticamente
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    setTimeout(() => {
+                        if (alert.parentNode) alert.remove();
+                    }, 300);
+                }, 5000);
+                
+                const closeBtn = alert.querySelector('.close-alert');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => {
+                        alert.style.opacity = '0';
+                        setTimeout(() => {
+                            if (alert.parentNode) alert.remove();
+                        }, 300);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

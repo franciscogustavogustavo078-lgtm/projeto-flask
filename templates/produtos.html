@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Produtos - GS System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Gerenciar Produtos</h2>
+</div>
+
+<!-- FORMULÁRIO -->
+<div class="form-container">
+    <form method="POST" action="{{ url_for('novo_produto') }}">
+        
+        <div class="form-group">
+            <label>Nome *</label>
+            <input type="text" name="nome" required>
+        </div>
+
+        <div class="form-group">
+            <label>Descrição</label>
+            <textarea name="descricao"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Preço *</label>
+            <input type="number" step="0.01" name="preco" required>
+        </div>
+
+        <div class="form-group">
+            <label>Quantidade</label>
+            <input type="number" name="quantidade" value="0">
+        </div>
+
+        <button type="submit">Cadastrar Produto</button>
+    </form>
+</div>
+
+<!-- TABELA -->
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos %}
+            <tr>
+                <td>{{ produto.id }}</td>
+                <td>{{ produto.nome }}</td>
+                <td>{{ produto.descricao or '-' }}</td>
+                <td>R$ {{ "%.2f"|format(produto.preco) }}</td>
+                <td {% if produto.quantidade < 5 %}style="color:red;"{% endif %}>
+                    {{ produto.quantidade }}
+                </td>
+                <td>
+
+                    <!-- EDITAR (simples) -->
+                    <form method="POST" action="{{ url_for('editar_produto', id=produto.id) }}" style="display:inline;">
+                        <input type="hidden" name="nome" value="{{ produto.nome }}">
+                        <input type="hidden" name="descricao" value="{{ produto.descricao }}">
+                        <input type="hidden" name="preco" value="{{ produto.preco }}">
+                        <input type="hidden" name="quantidade" value="{{ produto.quantidade }}">
+                        <button type="submit">Editar</button>
+                    </form>
+
+                    <!-- DELETAR -->
+                    <a href="{{ url_for('deletar_produto', id=produto.id) }}">
+                        <button type="button">Deletar</button>
+                    </a>
+
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align:center;">
+                    Nenhum produto cadastrado
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

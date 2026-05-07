@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Usuários - GS System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Gerenciar Usuários</h2>
+    <a href="{{ url_for('usuarios') }}#form" class="btn-primary">
+        Novo Usuário
+    </a>
+</div>
+
+<!-- FORMULÁRIO -->
+<div id="form" class="form-container">
+    <form method="POST" action="{{ url_for('novo_usuario') }}">
+        
+        <div class="form-group">
+            <label>Nome *</label>
+            <input type="text" name="nome" required>
+        </div>
+
+        <div class="form-group">
+            <label>Email *</label>
+            <input type="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label>Telefone</label>
+            <input type="text" name="telefone">
+        </div>
+
+        <button type="submit" class="btn-submit">Cadastrar</button>
+    </form>
+</div>
+
+<!-- TABELA -->
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Data Cadastro</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.nome }}</td>
+                <td>{{ usuario.email }}</td>
+                <td>{{ usuario.telefone or '-' }}</td>
+                <td>{{ usuario.data_cadastro }}</td>
+                <td>
+                    <!-- EDITAR -->
+                    <form method="POST" action="{{ url_for('editar_usuario', id=usuario.id) }}" style="display:inline;">
+                        <input type="hidden" name="nome" value="{{ usuario.nome }}">
+                        <input type="hidden" name="email" value="{{ usuario.email }}">
+                        <input type="hidden" name="telefone" value="{{ usuario.telefone }}">
+                        <button type="submit">Editar</button>
+                    </form>
+
+                    <!-- DELETAR -->
+                    <a href="{{ url_for('deletar_usuario', id=usuario.id) }}">
+                        <button type="button">Deletar</button>
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align:center;">
+                    Nenhum usuário cadastrado
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

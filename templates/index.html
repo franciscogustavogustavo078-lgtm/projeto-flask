@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - GS System{% endblock %}
+
+{% block content %}
+<div class="welcome-card">
+    <div class="welcome-header">
+        <h2>
+            <i class="fas fa-hands-helping"></i> 
+            Bem-vindo ao Sistema
+        </h2>
+        <div class="divider"></div>
+    </div>
+    <div class="welcome-body">
+        <div class="welcome-message">
+            <i class="fas fa-smile-wink"></i>
+            <span>Use o menu acima para navegar entre as principais áreas do sistema.</span>
+        </div>
+        
+        <div class="info-grid">
+            <div class="info-card">
+                <i class="fas fa-users"></i>
+                <h3>Total de Usuários</h3>
+                <p class="stats-number">{{ total_usuarios }}</p>
+                <small>Cadastrados no sistema</small>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-box"></i>
+                <h3>Produtos em Estoque</h3>
+                <p class="stats-number">{{ total_produtos }}</p>
+                <small>Produtos cadastrados</small>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-truck"></i>
+                <h3>Fornecedores</h3>
+                <p class="stats-number">{{ total_fornecedores }}</p>
+                <small>Parceiros comerciais</small>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Vendas Realizadas</h3>
+                <p class="stats-number">{{ total_vendas }}</p>
+                <small>Transações concluídas</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="quick-actions">
+    <h3><i class="fas fa-bolt"></i> Ações Rápidas</h3>
+    <div class="action-buttons">
+        <a href="{{ url_for('venda') }}" class="action-btn primary">
+            <i class="fas fa-cart-plus"></i> Nova Venda
+        </a>
+        <a href="{{ url_for('produtos') }}" class="action-btn secondary">
+            <i class="fas fa-plus-circle"></i> Cadastrar Produto
+        </a>
+        <a href="{{ url_for('usuarios') }}" class="action-btn secondary">
+            <i class="fas fa-user-plus"></i> Novo Usuário
+        </a>
+    </div>
+</div>
+{% endblock %}

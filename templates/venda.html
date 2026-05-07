@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Venda - GS System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2><i class="fas fa-tag"></i> Nova Venda</h2>
+    <a href="{{ url_for('historico_vendas') }}" class="btn-secondary">
+        <i class="fas fa-history"></i> Histórico de Vendas
+    </a>
+</div>
+
+<div class="venda-container">
+    <div class="venda-form">
+        <form method="POST" action="{{ url_for('finalizar_venda') }}">
+            <div class="form-group">
+                <label>Cliente</label>
+                <input type="text" name="cliente_nome" placeholder="Nome do cliente" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Produto</label>
+                <select name="produto_id" required>
+                    <option value="">Selecione um produto</option>
+                    {% for produto in produtos %}
+                    <option value="{{ produto.id }}">
+                        {{ produto.nome }} - R$ {{ "%.2f"|format(produto.preco) }} (Estoque: {{ produto.quantidade }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Quantidade</label>
+                <input type="number" name="quantidade" min="1" value="1" required>
+            </div>
+
+            <!-- Valores calculados no backend -->
+            {% if total is defined %}
+            <div class="form-group">
+                <label>Valor Unitário</label>
+                <input type="text" value="R$ {{ "%.2f"|format(valor_unitario) }}" readonly class="readonly-field">
+            </div>
+            <div class="form-group">
+                <label>Valor Total</label>
+                <input type="text" value="R$ {{ "%.2f"|format(total) }}" readonly class="readonly-field highlight-total">
+            </div>
+            {% endif %}
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit btn-large">
+                    <i class="fas fa-check-circle"></i> Finalizar Venda
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="venda-info">
+        <div class="info-box">
+            <i class="fas fa-info-circle"></i>
+            <h3>Informações Importantes</h3>
+            <ul>
+                <li>Verifique a quantidade em estoque antes de finalizar</li>
+                <li>O estoque será atualizado automaticamente</li>
+                <li>Venda sujeita à disponibilidade do produto</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

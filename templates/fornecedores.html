@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Fornecedores - GS System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Gerenciar Fornecedores</h2>
+</div>
+
+<!-- FORMULÁRIO -->
+<div class="form-container">
+    <form method="POST" action="{{ url_for('novo_fornecedor') }}">
+        
+        <div class="form-group">
+            <label>Nome *</label>
+            <input type="text" name="nome" required>
+        </div>
+
+        <div class="form-group">
+            <label>CNPJ</label>
+            <input type="text" name="cnpj">
+        </div>
+
+        <div class="form-group">
+            <label>Telefone</label>
+            <input type="text" name="telefone">
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email">
+        </div>
+
+        <div class="form-group">
+            <label>Endereço</label>
+            <textarea name="endereco"></textarea>
+        </div>
+
+        <button type="submit">Cadastrar Fornecedor</button>
+    </form>
+</div>
+
+<!-- TABELA -->
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CNPJ</th>
+                <th>Telefone</th>
+                <th>Email</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fornecedor in fornecedores %}
+            <tr>
+                <td>{{ fornecedor.id }}</td>
+                <td>{{ fornecedor.nome }}</td>
+                <td>{{ fornecedor.cnpj or '-' }}</td>
+                <td>{{ fornecedor.telefone or '-' }}</td>
+                <td>{{ fornecedor.email or '-' }}</td>
+                <td>
+
+                    <!-- EDITAR -->
+                    <form method="POST" action="{{ url_for('editar_fornecedor', id=fornecedor.id) }}" style="display:inline;">
+                        <input type="hidden" name="nome" value="{{ fornecedor.nome }}">
+                        <input type="hidden" name="cnpj" value="{{ fornecedor.cnpj }}">
+                        <input type="hidden" name="telefone" value="{{ fornecedor.telefone }}">
+                        <input type="hidden" name="email" value="{{ fornecedor.email }}">
+                        <input type="hidden" name="endereco" value="{{ fornecedor.endereco }}">
+                        <button type="submit">Editar</button>
+                    </form>
+
+                    <!-- DELETAR -->
+                    <a href="{{ url_for('deletar_fornecedor', id=fornecedor.id) }}">
+                        <button type="button">Deletar</button>
+                    </a>
+
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align:center;">
+                    Nenhum fornecedor cadastrado
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
