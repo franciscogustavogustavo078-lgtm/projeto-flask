@@ -10,9 +10,8 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sua-chave-secreta-aqui'
 
-
 engine = create_engine(
-    "mysql+pymysql://root:@localhost:3306/projeto_flask", 
+    "mysql+pymysql://root:@localhost:3306/projeto_flask",
     echo=True
 )
 
@@ -120,6 +119,7 @@ def novo_usuario():
     if nome and email:
 
         for u in lista_usuarios:
+
             if u['email'] == email:
 
                 flash('Email já cadastrado!', 'danger')
@@ -135,7 +135,7 @@ def novo_usuario():
 
         lista_usuarios.append(novo)
 
-        # SALVAR NO MYSQL
+        # SALVAR MYSQL
         session = Session()
 
         usuario_db = Usuario(
@@ -153,6 +153,40 @@ def novo_usuario():
         contador_id += 1
 
         flash('Usuário cadastrado com sucesso!', 'success')
+
+    return redirect(url_for('usuarios'))
+
+
+# =========================
+# EDITAR USUÁRIO
+# =========================
+
+@app.route('/usuarios/editar/<int:id>', methods=['GET', 'POST'])
+def editar_usuario(id):
+
+    for usuario in lista_usuarios:
+
+        if usuario['id'] == id:
+
+            if request.method == 'POST':
+
+                usuario['nome'] = request.form.get('nome')
+                usuario['email'] = request.form.get('email')
+                usuario['telefone'] = request.form.get('telefone')
+
+                flash(
+                    'Usuário atualizado com sucesso!',
+                    'success'
+                )
+
+                return redirect(url_for('usuarios'))
+
+            return render_template(
+                'editar_usuario.html',
+                usuario=usuario
+            )
+
+    flash('Usuário não encontrado!', 'danger')
 
     return redirect(url_for('usuarios'))
 
